@@ -18,9 +18,23 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('/home', function () {
+    //return view('welcome');
+    echo "This is homepage";
+});
+
 // Route::get('about', function () {
 Route::get('/about', function () {
     return view('about');
-});
+})->middleware('check');
 
-Route::get('/contact', [ContactController::class, 'index']);
+Route::get('/contact-test-test', [ContactController::class, 'index'])->name('con');
+Route::middleware([
+    'auth:sanctum',
+    config('jetstream.auth_session'),
+    'verified'
+])->group(function () {
+    Route::get('/dashboard', function () {
+        return view('dashboard');
+    })->name('dashboard');
+});
