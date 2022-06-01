@@ -1,7 +1,12 @@
 <?php
 
+use App\Http\Controllers\CategoryController;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ContactController;
+use App\Models\User;
+
+
 
 /*
 |--------------------------------------------------------------------------
@@ -29,12 +34,20 @@ Route::get('/about', function () {
 })->middleware('check');
 
 Route::get('/contact-test-test', [ContactController::class, 'index'])->name('con');
+
+// Category Controller
+Route::get('category/all', [CategoryController::class, 'AllCat'])->name('all.category');
+Route::post('category/add', [CategoryController::class, 'AddCat'])->name('store.category');
+
 Route::middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),
     'verified'
 ])->group(function () {
     Route::get('/dashboard', function () {
-        return view('dashboard');
+        //$users = User::all();
+
+        $users = DB::table('users')->get();
+        return view('dashboard', compact('users'));
     })->name('dashboard');
 });
