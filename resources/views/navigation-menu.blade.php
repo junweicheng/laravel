@@ -18,6 +18,9 @@
                     <x-jet-nav-link href="{{ route('all.category') }}" >
                         {{ __('All Category') }}
                     </x-jet-nav-link>
+                    <x-jet-nav-link href="{{ route('all.brand') }}" >
+                        {{ __('Brand') }}
+                    </x-jet-nav-link>
                 </div>
             </div>
 

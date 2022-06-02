@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('All Category') }}
+            {{ __('All Brand') }}
 
         </h2>
     </x-slot>
@@ -20,58 +20,70 @@
                     </button>
                     </div>
                     @endif
-                    <div class="card-header">All Category</div>
+                    <div class="card-header">All Brand</div>
                     <table class="table">
                         <thead>
                             <tr>
                             <th scope="col">#</th>
-                            <th scope="col">Category Name</th>
-                            <th scope="col">User</th>
+                            <th scope="col">Brand Name</th>
+                            <th scope="col">Brand Image</th>
                             <th scope="col">Created At</th>
                             <th scope="col"></th>
                             </tr>
                         </thead>
                         <tbody>
                             <!-- @php($i=1) -->
-                            @foreach($categories as $category)
+                            @foreach($brands as $brand)
                             <tr>
-                            <th scope="row">{{$categories->firstItem()+$loop->index}}</th>
-                            <td>{{$category->category_name}}</td>
-                            <td>{{$category->user->name}}</td>
-                            <td>@if($category->created_at == null)
+                            <th scope="row">{{$brands->firstItem()+$loop->index}}</th>
+                            <td>{{$brand->brand_name}}</td>
+                            <td>{{$brand->brand_image}} <img style="height:40px;" src="{{asset($brand->brand_image)}}"></td>
+                            <td>@if($brand->created_at == null)
                                 <span class="text-danger">No date set</span>
                                 @else
-                                {{Carbon\Carbon::parse($category->created_at)->diffForHumans()}}</td>
+                                {{Carbon\Carbon::parse($brand->created_at)->diffForHumans()}}</td>
                                 @endif
                             <td>
-                                <a href="{{url('category/edit/'.$category->id)}}" class="btn btn-info">Edit</a>
-                                <a href="{{url('softdelete/category/'.$category->id)}}" class="btn btn-danger">Delete</a>
+                                <a href="{{url('brand/edit/'.$brand->id)}}" class="btn btn-info">Edit</a>
+                                <a href="{{url('softdelete/brand/'.$brand->id)}}" class="btn btn-danger">Delete</a>
                             </td>
                             </tr>
                             @endforeach
                         </tbody>
                     </table>
-                    {{$categories->links()}}
+                    {{$brands->links()}}
                 </div>
             </div>
             <div class="col-md-4">
                 <div class="card">
-                    <div class="card-header">Add Category</div>
+                    <div class="card-header">Add Brand</div>
                     <div class="card-body">
-                    <form action="{{route('store.category')}}" method="post">
+                    <form action="{{route('store.brand')}}" method="post" enctype="multipart/form-data">
                     @csrf
+                    <!-- without csrf token, it will not instert any data into db -->
                     <div class="form-group">
-                        <label for="exampleInputEmail1">Category Name</label>
-                        <input type="text" name="category_name" class="form-control" id="exampleInputEmail1" aria-describedby="categoryHelp">
-                        @error('category_name')
+                        <label for="exampleInputEmail1">Brand Name</label>
+                        <input type="text" name="brand_name" class="form-control" id="exampleInputEmail1" aria-describedby="categoryHelp">
+                        @error('brand_name')
                             <span class="text-danger">
                                 {{$message}}
                             </span>
                         @enderror
-                        <small id="categoryHelp" class="form-text text-muted">Category Name.</small>
+                        <small id="categoryHelp" class="form-text text-muted">Brand Name.</small>
                     </div>
 
-                    <button type="submit" class="btn btn-primary">Add Category</button>
+                    <div class="form-group">
+                        <label for="exampleInputEmail1">Brand Image</label>
+                        <input type="file" name="brand_image" class="form-control" id="exampleInputEmail1" aria-describedby="categoryHelp">
+                        @error('brand_image')
+                            <span class="text-danger">
+                                {{$message}}
+                            </span>
+                        @enderror
+                        <small id="categoryHelp" class="form-text text-muted">Brand Image.</small>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Add Brand</button>
                     </form>
                     </div>
                 </div>
@@ -81,7 +93,6 @@
             </div>
         </div>
     </div>
-
 
     <!-- Trash Part -->
 
@@ -96,33 +107,33 @@
                         <thead>
                             <tr>
                             <th scope="col">#</th>
-                            <th scope="col">Category Name</th>
-                            <th scope="col">User</th>
+                            <th scope="col">Brand Name</th>
+                            <th scope="col">Brand Image</th>
                             <th scope="col">Deleted At</th>
                             <th scope="col"></th>
                             </tr>
                         </thead>
                         <tbody>
                             <!-- @php($i=1) -->
-                            @foreach($trashCat as $category)
+                            @foreach($trashBrand as $brand)
                             <tr>
-                            <th scope="row">{{$categories->firstItem()+$loop->index}}</th>
-                            <td>{{$category->category_name}}</td>
-                            <td>{{$category->user->name}}</td>
-                            <td>@if($category->created_at == null)
+                            <th scope="row">{{$trashBrand->firstItem()+$loop->index}}</th>
+                            <td>{{$brand->brand_name}}</td>
+                            <td><img style="height:40px;" src="{{asset($brand->brand_image)}}"></td>
+                            <td>@if($brand->created_at == null)
                                 <span class="text-danger">No date set</span>
                                 @else
-                                {{Carbon\Carbon::parse($category->deleted_at)->diffForHumans()}}</td>
+                                {{Carbon\Carbon::parse($brand->deleted_at)->diffForHumans()}}</td>
                                 @endif
                             <td>
-                                <a href="{{url('category/restore/'.$category->id)}}" class="btn btn-info">Restore</a>
-                                <a href="{{url('forcedelete/category/'.$category->id)}}" class="btn btn-danger">Delete</a>
+                                <a href="{{url('brand/restore/'.$brand->id)}}" class="btn btn-info">Restore</a>
+                                <a href="{{url('forcedelete/brand/'.$brand->id)}}" class="btn btn-danger">Delete</a>
                             </td>
                             </tr>
                             @endforeach
                         </tbody>
                     </table>
-                    <!-- {{$trashCat->links()}} -->
+                    {{$trashBrand->links()}} 
                 </div>
             </div>
             
