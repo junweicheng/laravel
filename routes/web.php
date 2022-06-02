@@ -54,6 +54,9 @@ Route::get('brand/restore/{id}', [BrandController::class, 'Restore']);
 Route::get('forcedelete/brand/{id}', [BrandController::class, 'ForceDelete']);
 Route::post('brand/update/{id}', [BrandController::class, 'Update']);
 
+// Multi Image 
+Route::get('multi/all', [BrandController::class, 'Multipic'])->name('multi.image');
+
 Route::middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),

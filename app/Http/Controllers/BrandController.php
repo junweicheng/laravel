@@ -146,4 +146,10 @@ class BrandController extends Controller
 
         return Redirect()->route('all.brand')->with('success', 'Brand Permantely Deleted Successfully');
     }
+
+
+    /// This is for Multi Image
+    public function Multipic() {
+        //return view('admin.brand.index', compact('brands', 'trashBrand'));
+    }
 }
