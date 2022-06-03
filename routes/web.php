@@ -56,6 +56,7 @@ Route::post('brand/update/{id}', [BrandController::class, 'Update']);
 
 // Multi Image 
 Route::get('multi/all', [BrandController::class, 'Multipic'])->name('multi.image');
+Route::post('multi/add', [BrandController::class, 'AddImage'])->name('store.image');
 
 Route::middleware([
     'auth:sanctum',
@@ -66,6 +67,7 @@ Route::middleware([
         //$users = User::all();
 
         $users = DB::table('users')->get();
-        return view('dashboard', compact('users'));
+        return view('admin.index', compact('users'));
     })->name('dashboard');
 });
+Route::get('user/logout', [BrandController::class, 'Logout'])->name('user.logout');

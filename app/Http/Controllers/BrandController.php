@@ -3,12 +3,19 @@
 namespace App\Http\Controllers;
 
 use App\Models\Brand;
+use App\Models\Multipic;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Image;
+use Auth;
 
 class BrandController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     // All Brand
     public function AllBrand() {
         $brands = Brand::latest()->paginate(5);
@@ -150,6 +157,59 @@ class BrandController extends Controller
 
     /// This is for Multi Image
     public function Multipic() {
-        //return view('admin.brand.index', compact('brands', 'trashBrand'));
+        $images = Multipic::all();
+        return view('admin.multipic.index',compact('images'));
+    }
+
+    public function AddImage(Request $request) {
+        // $validated = $request->validate([
+        //     'image' => 'required|mimes:jpg,jpeg,gif,png',
+        // ],
+        // [
+        //     'image.required' => 'Please Select Brand Image',
+        //     'image.mimes' => 'Invalid Image Type',
+        // ]);
+
+        $image = $request->file('image');
+
+        foreach($image as $multi_image) {
+            $name_gen = hexdec(uniqid()).'.'.$multi_image->getClientOriginalExtension();
+            Image::make($multi_image)->resize(300, 300)->save('image/multipic/'.$name_gen);
+            $last_img = 'image/multipic/'.$name_gen;
+
+            $image = new Multipic;
+            $image->image = $last_img;
+            $image->created_at = Carbon::now();
+            $image->save();
+        }
+
+        // Category::insert([
+        //     'category_name' => $request->category_name,
+        //     'user_id' => Auth::user()->id,
+        //     'created_at' => Carbon::now(),
+        // ]);
+
+        // $category = new Category;
+        // $category->category_name = $request->category_name;
+        // $category->user_id = Auth::user()->id;
+        // $category->created_at = Carbon::now();
+        // $category->save();
+
+        // Query Builder
+        // $data = [];
+        // $data['category_name'] = $request->category_name;
+        // $data['user_id'] = Auth::user()->id;
+        // $data['created_at'] = Carbon::now();
+        // DB::table('categories')->insert($data);
+
+        // Query Builder no need to work with Model
+
+        return Redirect()->back()->with('success', 'Multi Image Inserted Successfully');
+    }
+
+    public function Logout() {
+        Auth::logout();
+
+        return Redirect()->route('login')->with('success', 'Logout Successful');
     }
 }
